@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-
+//0x5FbDB2315678afecb367f032d93F642f64180aa3
 function App() {
   const [balance, setBalance] = useState(0);
   const [userBalance, setUserBalance] = useState(0);
@@ -15,30 +15,277 @@ function App() {
     {
       inputs: [
         {
-          internalType: "string",
-          name: "_name",
-          type: "string",
+          internalType: "address",
+          name: "coinMintedTo",
+          type: "address",
+        },
+        {
+          internalType: "address",
+          name: "liquidityWalletFees",
+          type: "address",
+        },
+      ],
+      stateMutability: "nonpayable",
+      type: "constructor",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "spender",
+          type: "address",
         },
         {
           internalType: "uint256",
-          name: "_favNum",
+          name: "allowance",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "needed",
           type: "uint256",
         },
       ],
-      name: "addPerson",
-      outputs: [],
+      name: "ERC20InsufficientAllowance",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "sender",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "balance",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "needed",
+          type: "uint256",
+        },
+      ],
+      name: "ERC20InsufficientBalance",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "approver",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidApprover",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "receiver",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidReceiver",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "sender",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidSender",
+      type: "error",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+      ],
+      name: "ERC20InvalidSpender",
+      type: "error",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "owner",
+          type: "address",
+        },
+        {
+          indexed: true,
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "value",
+          type: "uint256",
+        },
+      ],
+      name: "Approval",
+      type: "event",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "from",
+          type: "address",
+        },
+        {
+          indexed: true,
+          internalType: "address",
+          name: "to",
+          type: "address",
+        },
+        {
+          indexed: false,
+          internalType: "uint256",
+          name: "value",
+          type: "uint256",
+        },
+      ],
+      name: "Transfer",
+      type: "event",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "owner",
+          type: "address",
+        },
+        {
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+      ],
+      name: "allowance",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "value",
+          type: "uint256",
+        },
+      ],
+      name: "approve",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "",
+          type: "bool",
+        },
+      ],
       stateMutability: "nonpayable",
       type: "function",
     },
     {
       inputs: [
         {
+          internalType: "address",
+          name: "account",
+          type: "address",
+        },
+      ],
+      name: "balanceOf",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "decimals",
+      outputs: [
+        {
+          internalType: "uint8",
+          name: "",
+          type: "uint8",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "liquidityFeeWallet",
+      outputs: [
+        {
+          internalType: "address",
+          name: "",
+          type: "address",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "name",
+      outputs: [
+        {
           internalType: "string",
           name: "",
           type: "string",
         },
       ],
-      name: "nameToFavNumber",
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "symbol",
+      outputs: [
+        {
+          internalType: "string",
+          name: "",
+          type: "string",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "totalSupply",
       outputs: [
         {
           internalType: "uint256",
@@ -52,68 +299,53 @@ function App() {
     {
       inputs: [
         {
+          internalType: "address",
+          name: "to",
+          type: "address",
+        },
+        {
           internalType: "uint256",
+          name: "value",
+          type: "uint256",
+        },
+      ],
+      name: "transfer",
+      outputs: [
+        {
+          internalType: "bool",
           name: "",
-          type: "uint256",
+          type: "bool",
         },
       ],
-      name: "people",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "favNum",
-          type: "uint256",
-        },
-        {
-          internalType: "string",
-          name: "name",
-          type: "string",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "person",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "favNum",
-          type: "uint256",
-        },
-        {
-          internalType: "string",
-          name: "name",
-          type: "string",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "retrieve",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-      ],
-      stateMutability: "view",
+      stateMutability: "nonpayable",
       type: "function",
     },
     {
       inputs: [
         {
+          internalType: "address",
+          name: "from",
+          type: "address",
+        },
+        {
+          internalType: "address",
+          name: "to",
+          type: "address",
+        },
+        {
           internalType: "uint256",
-          name: "_favNumber",
+          name: "value",
           type: "uint256",
         },
       ],
-      name: "store",
-      outputs: [],
+      name: "transferFrom",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "",
+          type: "bool",
+        },
+      ],
       stateMutability: "nonpayable",
       type: "function",
     },
@@ -131,13 +363,19 @@ function App() {
       userAddress = await signer.getAddress();
 
       let userBalanceFetch = await GetBalance(userAddress);
-      console.log("the user balance is ", userBalanceFetch);
+      //console.log("the user balance is ", userBalanceFetch);
       setUserBalance(userBalanceFetch);
 
       let contractBalanceFetch = await GetBalance(ContractAddress);
       setBalance(contractBalanceFetch);
+      //console.log("the user Adrees is ", userAddress);
 
-      console.log("the user Adrees is ", userAddress);
+      ///the total supply
+      console.log("the contract address is ", ContractAddress);
+      const contractRO = new ethers.Contract(ContractAddress, ABI, provider);
+      console.log("the contract is ", contractRO);
+      const getTotalSupply = await contractRO.totalSupply();
+      console.log("the total supply of the coin is ", getTotalSupply);
     }
   };
 
@@ -149,40 +387,27 @@ function App() {
     //
   };
 
-  const CallContract = async () => {
-    // if (signer != null) {
-    //provider = new ethers.BrowserProvider(window.ethereum);
-    signer = await provider.getSigner();
-    //console.log("the contract is ", contractRO);
-    const contractRO = new ethers.Contract(ContractAddress, ABI, provider);
-    const getFavNum = await contractRO.retrieve();
-    const favNumString = getFavNum.toString(); // Convert BigInt to string
-    console.log(typeof favNumString); // Check type, should be 'string'
-    setFavouriteNumber(favNumString);
-    console.log("the Fav num is ", getFavNum);
-    // }
-  };
+  // const CallContract = async () => {
+  //   // if (signer != null) {
+  //   //provider = new ethers.BrowserProvider(window.ethereum);
+  //   signer = await provider.getSigner();
+  //   //console.log("the contract is ", contractRO);
+  //   const contractRO = new ethers.Contract(ContractAddress, ABI, provider);
+  //   const getFavNum = await contractRO.retrieve();
+  //   const favNumString = getFavNum.toString(); // Convert BigInt to string
+  //   console.log(typeof favNumString); // Check type, should be 'string'
+  //   setFavouriteNumber(favNumString);
+  //   console.log("the Fav num is ", getFavNum);
+  //   // }
+  // };
 
-  const handleButton = async () => {
-    // if (signer != null) {
-    //signer = await provider.getSigner();
-    const contract = new ethers.Contract(ContractAddress, ABI, signer);
-    const storeData = await contract.store(changeFavNum);
-    storeData.wait();
-    setChangeFavNum(0);
-    //const getAgainFavNum = await contractRO.retrieve();
-    // console.log("the again Fav num is ", getAgainFavNum);
-    // setFavouriteNumber(getAgainFavNum);
-    // } else {
-    //   console.log("signer is null");
-    // }
-  };
+  const handleButton = async () => {};
 
   useEffect(() => {
     const funs = async () => {
       await ConnectWallet().catch(console.error);
       //await GetBalance();
-      await CallContract();
+      //await CallContract();
     };
     funs();
   });
